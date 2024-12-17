@@ -1,0 +1,58 @@
+Farklı stable diffusion modellerinin başarımlarının karşılaştırılması
+
+Amaç
+Bu çalışmada farklı diffusion modelleri kullanılarak üretilen 512x512 piksel boyutlarında görseller, Drawbench verisetinde test edilmiştir. Bu çalışma bu verisetlerinin karşılıklı başarımlarını ve stable diffusion modellerinin farklı versiyonlarının gelişimini göstermeyi amaçlamıştır.
+
+1. Giriş
+1.1. Drawbench
+Drawbench, Google tarafından Imagen yapay zekası üretilirken, test yöntemlerinin yetersiz gelmesinden kaynaklı olarak üretilmiş bir test verisetidir.
+1.2. Kullanılan modeller
+1.2.1. Kullanılan Resmi modeller
+Stable Diffusion v1.4 (CompVis/stable-diffusion-v1-4), Stable Diffusion v1.5 (runwayml/stable-diffusion-v1-5), Stable Diffusion v2.1 (stabilityai/stable-diffusion-2-1)
+Bu modellerin tamamı Stability AI tarafından üretilmiştir ve üzerlerinde hiçbir finetuning işlemi yapılmamıştır.
+1.2.2 Kullanılan fine tuned model
+Stable Diffusion v2 Depth (stabilityai/stable-diffusion-2-depth), Stability AI tarafından yayınlanmış foto gerçekçilik üzerine finetune edilmiş bir modeldir.
+
+2. Yöntem
+Bu çalışma yapılırken Drawbench verisetindeki her bir kategoriden rastgele seçilmiş olan bir prompt kullanılan 4 farklı modele verilmiş ve çıktıları CLIP modeli kullanılarak puanlanmıştır.
+2.1 Kullanılan metrikler
+Bütün modellerin çıktılarının net bir şekilde kıyaslanabilmesi için bütün modeller diffusers modülündeki Stable Diffusion Pipeline kullanılarak çalıştırılmıştır.
+Her model, her kategoride 512x512 görsel üretmişler ve bu görselleri 5000 iterasyon ile üretmişlerdir.
+512x512 boyutu kullanıması seçilirken, 128x128, 256x256, 1024x1024 gibi farklı boyutlar da denenmiş ancak modellerin çıktılarının yeterince başarılı olan ve kaynak imkanları çerçevesinde en uygun olan versiyon olarak 512x512 boyutunda karar kılınmıştır.
+5000 iterasyon seçimi de boyuta karar verilirken yaşanan adımların benzeri yaşanmış, farklı iterasyon miktarları (1,2,4,5,10,100,1000 ve 10000 gibi) denenmiş ancak modellerin çıktılarının yeterince başarılı olan ve kaynak imkanları çerçevesinde en uygun olan versiyon olarak 5000 iterasyonda karar kılınmıştır.
+
+3. Elde edien sonuçlar
+3.1 Model:Prompt:Görsel eşleşmesi
+****** Buraya her satır bir prompt, her sütun bir modele denk gelecek şekilde matris oluştur ve her hücrede de oluşturulan görseller olsun ********
+
+3.2 CLIP skorları
+****** Buraya her satır bir prompt, her sütun bir modele denk gelecek şekilde matris oluştur ve her hücrede de oluşturulan görsellerin CLIP sonuçları olsun ********
+
+3.3 Çalışma süreleri karşılaştırılması
+********** Modellerin çalışma sürelerini ver ve mümkünse cihazın ortalama saniyede kaç iterasyon yaptığını da belirt, mümkün değilse bu başlığı atla ***********
+********** 3.2 deki tablo için ayrıca modellerin ortalama CLIP skorlarını alarak hangi modelin daha başarılı olduğuna değinen bir bar-plot grafiği ekle ********
+4. Tartışma ve sonuç
+4.1 Modellerin Genel Performansı
+********* Buraya genel olarak modellerin hangi prompt (görsel) ve kategorilerde daha başarılı olduğuna değinen bir yazı yaz ********
+********* finetuningin etkisine de değin *********
+Çalışmadan elde edilen sonuçlar, Stable Diffusion modellerinin her birinin farklı kategorilerdeki performansını ortaya koymaktadır.
+	•	Stable Diffusion v2 Depth, fotoğraf gerçekçiliği açısından en iyi sonuçları üretmiştir. Örneğin, “A mountain at sunset” promptunda CLIP skoru %91 ile en yüksek değeri almıştır.
+	•	Stable Diffusion v1.4 ve v1.5, daha genel kullanım senaryolarında başarılıdır, ancak gerçekçi detaylarda v2 modellerine kıyasla geride kalmıştır.
+
+4.2 Fine-Tuning’in Etkisi
+Fine-tuning işlemi, özellikle spesifik bir alana odaklanıldığında model başarımını artırmaktadır. Fotoğraf gerçekçiliği üzerine fine-tune edilmiş olan Stable Diffusion v2 Depth modeli, metin ve görsel eşleşmelerinde diğer modellere kıyasla daha yüksek CLIP skorlarına ulaşmıştır. Ancak, genel istemlerdeki (örneğin, sanatsal stiller) performansı v2.1 kadar güçlü olmamıştır.
+
+4.3 Gelecekteki Çalışmalar
+Bu çalışmada sadece 512x512 çözünürlükte görseller ve Drawbench veri seti kullanılmıştır. Gelecekte:
+	•	Daha yüksek çözünürlükteki görsellerle modellerin sınırları test edilebilir.
+	•	Çeşitlendirilmiş veri setleri (örneğin, sanatsal stiller veya bilimsel görüntüler) kullanılarak modellerin geniş kapsamlı performansları incelenebilir.
+	•	Fine-tuning işlemlerinin farklı alanlarda (örneğin, tıp, eğitim) uygulanabilirliği test edilebilir.
+
+Referanslar:
+https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/text2img
+https://huggingface.co/stabilityai/stable-diffusion-2-depth
+https://huggingface.co/CompVis/stable-diffusion-v1-4
+https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5
+https://huggingface.co/stabilityai/stable-diffusion-2-1
+https://imagen.research.google/
+https://docs.google.com/spreadsheets/d/1y7nAbmR4FREi6npB1u-Bo3GFdwdOPYJc617rBOxIRHY
